@@ -27,6 +27,7 @@ public class GameSceneManager : MonoBehaviour
     public GameObject m_hitOtherEffect;
     public GameObject m_grenade;
     public GameObject m_grenadeEffect;
+    public GameObject m_prop;
 
     public TMP_Text m_attackStateText;
     public TMP_Text m_ammoText;
@@ -36,9 +37,13 @@ public class GameSceneManager : MonoBehaviour
     public BufferPool m_hitEnemyPool;
     public BufferPool m_hitOtherPool;
     public BufferPool m_grenadeEffectPool;
+    public PropBufferPool m_propPool;
 
     public List<GameObject> m_grenades;
     private List<int> m_boomIndex;
+
+    public List<GameObject> m_props;
+    private List<int> m_tempProps;
     // Start is called before the first frame update
     void Awake()
     {
@@ -46,13 +51,14 @@ public class GameSceneManager : MonoBehaviour
 
 
         m_grenades = new List<GameObject>();
+        m_props = new List<GameObject>();
         m_boomIndex = new List<int>();
         initPlayers();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         m_hitEnemyPool.SetBufferPool(m_hitEnemyEffect, 10);
         m_hitOtherPool.SetBufferPool(m_hitOtherEffect, 10);
-
+        m_propPool.SetBufferPool(m_prop, 6);
         m_grenadeEffectPool.SetBufferPool(m_grenadeEffect, 3);
     }
 
@@ -201,6 +207,38 @@ public class GameSceneManager : MonoBehaviour
                 {
                     SendMessageToServer("UD" + enemy.m_id + " " + 20);
                 }
+            }
+        }
+    }
+
+    public void InitProp()
+    {
+        m_tempProps = new List<int>();
+    }
+
+    public void SetProp(int id, float x,float z)
+    {
+        m_tempProps.Add(id);
+        foreach (var item in m_props)
+        {
+            if(item.GetComponent<Prop>().ID == id)
+            {
+                return;
+            }
+        }
+        GameObject prop = m_propPool.CreatePropInstance(new Vector3(x, 0, z), Quaternion.identity, id);
+        m_props.Add(prop);
+    }
+
+    public void DestroyProp()
+    {
+        for(int i = 0;i < m_props.Count; i++)
+        {
+            if (!m_tempProps.Contains(m_props[i].GetComponent<Prop>().ID))
+            {
+                m_propPool.DestoryBuffer(m_props[i]);
+                m_props.RemoveAt(i);
+                i--;
             }
         }
     }

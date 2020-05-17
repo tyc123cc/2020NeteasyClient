@@ -25,7 +25,7 @@ public class BufferPool:MonoBehaviour
         }
     }
 
-    public void CreateInstance(Vector3 pos,Quaternion quaternion,float time)
+    public GameObject CreateInstance(Vector3 pos,Quaternion quaternion,float time)
     {
         GameObject instance = null;
         int index = 0;
@@ -45,16 +45,37 @@ public class BufferPool:MonoBehaviour
         {
             GameObject obj = m_buffers[0].obj;
             instance = GameObject.Instantiate(obj, pos, quaternion);
-            GameObject.Destroy(instance, time);
+            if(time != 0)
+            {
+                GameObject.Destroy(instance, time);
+            }
         }
         else
         {
             instance.transform.position = pos;
             instance.transform.rotation = quaternion;
             instance.SetActive(true);
-            m_destroyIndex.Add(index);
-            Invoke("DestoryBuffer", time);
+            if(time != 0)
+            {
+                m_destroyIndex.Add(index);
+                Invoke("DestoryBuffer", time);
+            }
         }
+        return instance;
+    }
+
+    public void DestoryBuffer(GameObject buffer)
+    {
+        for(int i = 0;i < m_buffers.Count;i++)
+        {
+            if(m_buffers[i].obj == buffer)
+            {
+                m_buffers[i].obj.SetActive(false);
+                m_buffers[i].created = false;
+                return;
+            }
+        }
+        Destroy(buffer);
     }
 
     private void DestoryBuffer()

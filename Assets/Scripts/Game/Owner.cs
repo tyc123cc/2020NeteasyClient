@@ -29,6 +29,9 @@ public class Owner : MonoBehaviour
 
     public Skill m_skill;
 
+    public TMP_Text m_propText;
+    private int m_targetProp = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +41,7 @@ public class Owner : MonoBehaviour
         m_player = GetComponent<Player>();
         m_manager = GameObject.Find("GameSceneManager").GetComponent<GameSceneManager>();
         m_skill = GameObject.Find("Canvas/Skill").GetComponent<Skill>();
+        m_propText = GameObject.Find("Canvas/PropText").GetComponent<TMP_Text>();
         m_camera = Camera.main.gameObject;
         m_upBody = transform.Find("Bip001").Find("Bip001 Pelvis").Find("Bip001 Spine").gameObject;
         m_moveState = MoveState.IDLE;
@@ -79,7 +83,7 @@ public class Owner : MonoBehaviour
         {
             return;
         }
-        if (m_player.m_curAmmo == 0)
+        if (m_player.m_curAmmo <= 0)
         {
             UnBurstShoot();
             return;
@@ -158,7 +162,7 @@ public class Owner : MonoBehaviour
         {
             return;
         }
-        if(m_player.m_curAmmo == 0 || m_player.GetAttackState() == AttackState.RELOAD)
+        if(m_player.m_curAmmo <= 0 || m_player.GetAttackState() == AttackState.RELOAD)
         {
             return;
         }
@@ -269,6 +273,41 @@ public class Owner : MonoBehaviour
             m_jump = false;
             SetMotion(m_player.GetMotion(),true);
         }
+        PickUpProp();
+    }
+
+    private void PickUpProp()
+    {
+        bool nearProp = false;
+        foreach (var prop in m_manager.m_props)
+        {
+            Vector2 propPos = new Vector2(prop.transform.position.x, prop.transform.position.z);
+            Vector2 ownerPos = new Vector2(transform.position.x, transform.position.z);
+            if(Vector2.Distance(propPos,ownerPos) < 1)
+            {
+                m_propText.gameObject.SetActive(true);
+                m_targetProp = prop.GetComponent<Prop>().ID;
+                nearProp = true;
+                break;
+            }
+        }
+        if (nearProp)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                string username = UserMessage.username;
+                SendOwnerMsgToServer("UP" + username + " " + m_targetProp);
+            }
+        }
+        else
+        {
+            if (m_propText.gameObject.activeSelf)
+            {
+                m_propText.gameObject.SetActive(false);
+            }
+            m_targetProp = 0;
+        }
+
     }
 
     float rotationY = 0f;

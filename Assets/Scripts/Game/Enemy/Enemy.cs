@@ -25,6 +25,9 @@ public class Enemy : MonoBehaviour
 
     public DamageNum m_damageNum;
 
+    public AudioSource m_attackAudioSource;
+    public AudioSource m_injuredAudioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +41,9 @@ public class Enemy : MonoBehaviour
         m_head = transform.Find("Legs_A");
         float offset = Mathf.Abs(Camera.main.WorldToScreenPoint(m_head.position).y - Camera.main.WorldToScreenPoint(m_leg.position).y);
         m_oriProp = new Vector2(0.3f / offset, 0.5f / offset);
+
+        m_attackAudioSource = transform.Find("Attack").GetComponent<AudioSource>();
+        m_injuredAudioSource = transform.Find("Injured").GetComponent<AudioSource>();
     }
 
     public void SetState(int hp,int state,Transform attackTarget)
@@ -86,6 +92,7 @@ public class Enemy : MonoBehaviour
                 m_ani.Play("Move");
                 break;
             case EnemyState.ENEMY_STATE_ATTACK:
+                m_attackAudioSource.Play();
                 if (Vector3.Distance(transform.position, m_shadow.transform.position) >= 2)
                 {
                     transform.position = m_shadow.transform.position;
@@ -134,6 +141,7 @@ public class Enemy : MonoBehaviour
             m_enemyHP.ReduceHP(m_HP - hp);
             float offset = Mathf.Abs(Camera.main.WorldToScreenPoint(m_head.position).y - Camera.main.WorldToScreenPoint(m_leg.position).y);
             m_damageNum.SetText(transform, offset / 2,(m_HP - hp).ToString());
+            m_injuredAudioSource.Play();
 
         }
         m_HP = hp;

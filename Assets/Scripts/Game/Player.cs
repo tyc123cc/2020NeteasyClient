@@ -47,11 +47,18 @@ public class Player : MonoBehaviour
     public float m_correctAngle = 5;
 
     public bool m_shoot = false;
+    private bool m_idle = true;
 
     public Transform m_looktarget;
     public Transform m_shadow;
 
     public GameSceneManager m_manager;
+
+    public AudioSource m_shootAudioSource;
+    public AudioSource m_injuredAudioSource;
+
+    public AudioClip m_singleShoot;
+    public AudioClip m_brustShoot;
 
 
     // Start is called before the first frame update
@@ -65,6 +72,9 @@ public class Player : MonoBehaviour
         m_nextLookPosY = m_looktarget.position.y;
         m_nextRotY = transform.eulerAngles.y;
         m_startTime = Time.time;
+        m_shootAudioSource = transform.Find("Shoot").GetComponent<AudioSource>();
+        m_injuredAudioSource = transform.Find("Injured").GetComponent<AudioSource>();
+
         if (username != UserMessage.username)
         {
             //GetComponent<Owner>().enabled = false;
@@ -133,38 +143,50 @@ public class Player : MonoBehaviour
         switch (m_moveState)
         {
             case MoveState.IDLE:
-                m_ani.SetFloat("ValX", 0.0f);
-                m_ani.SetFloat("ValY", 0.0f);
+                m_idle = true;
+                if(username == UserMessage.username)
+                {
+                    m_ani.SetFloat("ValX", 0.0f);
+                    m_ani.SetFloat("ValY", 0.0f);
+                }               
                 break;
             case MoveState.RUN:
+                m_idle = false;
                 m_ani.SetFloat("ValX", 0.0f);
                 m_ani.SetFloat("ValY", 1.0f);
                 break;
             case MoveState.RUN_LEFT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", -1.0f);
                 m_ani.SetFloat("ValY", 1.0f);
                 break;
             case MoveState.RUN_RIGHT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", 1.0f);
                 m_ani.SetFloat("ValY", 1.0f);
                 break;
             case MoveState.BACK:
+                m_idle = false;
                 m_ani.SetFloat("ValX", 0.0f);
                 m_ani.SetFloat("ValY", -1.0f);
                 break;
             case MoveState.BACK_LEFT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", 1.0f);
                 m_ani.SetFloat("ValY", -1.0f);
                 break;
             case MoveState.BACK_RIGHT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", -1.0f);
                 m_ani.SetFloat("ValY", -1.0f);
                 break;
             case MoveState.LEFT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", -1.0f);
                 m_ani.SetFloat("ValY", 0.0f);
                 break;
             case MoveState.RIGHT:
+                m_idle = false;
                 m_ani.SetFloat("ValX", 1.0f);
                 m_ani.SetFloat("ValY", 0.0f);
                 break;
@@ -182,6 +204,7 @@ public class Player : MonoBehaviour
             switch (m_attackState)
             {
                 case AttackState.IDLE:
+                    m_shootAudioSource.Stop();
                     m_ani.Play("Empty",m_upLayer);
                     m_shoot = false;
                     break;
@@ -189,29 +212,35 @@ public class Player : MonoBehaviour
                     m_shoot = true;
                     if(m_motion == Motion.WALK || m_motion == Motion.RUN || m_motion == Motion.JUMP)
                     {
+                        m_shootAudioSource.PlayOneShot(m_singleShoot);
                         m_ani.Play("infantry_combat_shoot", m_upLayer);
                     }
                     else
                     {
+                        m_shootAudioSource.PlayOneShot(m_singleShoot);
                         m_ani.Play("infantry_crouch_shoot", m_upLayer);
                     }
                     break;
                 case AttackState.BURST:
                     m_shoot = true;
                     if (m_motion == Motion.WALK || m_motion == Motion.RUN || m_motion == Motion.JUMP)
-                    {
+                    {                      
+                        m_shootAudioSource.Play();
                         m_ani.Play("infantry_combat_shoot_burst", m_upLayer);
                     }
                     else
                     {
+                        m_shootAudioSource.Play();
                         m_ani.Play("fantry_crouch_shoot_burst", m_upLayer);
                     }
                     break;
                 case AttackState.RELOAD:
+                    m_shootAudioSource.Stop();
                     m_shoot = true;
                     m_ani.Play("infantry_combat_reload", m_upLayer);
                     break;
                 case AttackState.THROW:
+                    m_shootAudioSource.Stop();
                     m_shoot = true;
                     m_ani.Play("infantry_throw_grenade", m_upLayer);
                     break;
@@ -228,6 +257,10 @@ public class Player : MonoBehaviour
 
     public void SetHP(int HP)
     {
+        if(HP < m_HP)
+        {
+            m_injuredAudioSource.Play();
+        }
         m_HP = HP;
     }
 
@@ -289,6 +322,11 @@ public class Player : MonoBehaviour
             Vector2 transPos = new Vector2(transform.position.x, transform.position.z);
             Vector2 targetPos = new Vector2(m_shadow.position.x, m_shadow.position.z);
             Vector2 nextPos = Vector2.MoveTowards(transPos, targetPos, m_speed * Time.deltaTime);
+            if(m_idle && Vector2.Distance(transPos,targetPos) < 0.1f && (m_motion != Motion.JUMP || m_motion != Motion.DEATH))
+            {
+                m_ani.SetFloat("ValX", 0.0f);
+                m_ani.SetFloat("ValY", 0.0f);
+            }
             float moveY = transform.position.y;
             if (m_motion == Motion.JUMP)
             {

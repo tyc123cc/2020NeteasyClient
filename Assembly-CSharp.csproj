@@ -72,6 +72,7 @@
     <Compile Include="Assets\Resources\Effects\AutoDestroy.cs" />
     <Compile Include="Assets\Scripts\Game\AttackState.cs" />
     <Compile Include="Assets\Scripts\Game\BufferPool\BufferPool.cs" />
+    <Compile Include="Assets\Scripts\Game\BufferPool\PropBufferPool.cs" />
     <Compile Include="Assets\Scripts\Game\BufferPool\Test.cs" />
     <Compile Include="Assets\Scripts\Game\Enemy\DamageNum.cs" />
     <Compile Include="Assets\Scripts\Game\Enemy\Enemy.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Scripts\Game\Player.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerMsg.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Game\Prop.cs" />
     <Compile Include="Assets\Scripts\Game\Shadow.cs" />
     <Compile Include="Assets\Scripts\Game\Skill.cs" />
     <Compile Include="Assets\Scripts\Game\TPSCamera.cs" />
