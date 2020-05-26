@@ -150,6 +150,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameSceneManager.m_gaming)
+        {
+            return;
+        }
         if (m_state == EnemyState.ENEMY_STATE_MOVE && Vector3.Distance(transform.position, m_shadow.transform.position) < 2)
         {
             transform.LookAt(m_shadow.transform.position);

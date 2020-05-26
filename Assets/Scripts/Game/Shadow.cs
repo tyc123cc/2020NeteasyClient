@@ -41,6 +41,10 @@ public class Shadow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameSceneManager.m_gaming)
+        {
+            return;
+        }
         Vector3 move = Vector3.zero;
         //if (moveDirection.y <= 0 && m_controller.isGrounded)
         {

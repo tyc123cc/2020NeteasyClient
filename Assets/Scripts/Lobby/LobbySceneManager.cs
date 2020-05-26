@@ -311,6 +311,7 @@ public class LobbySceneManager : MonoBehaviour
         {
             LoadSceneManager.m_map = map;
             LoadSceneManager.m_userNum = players.Count;
+            PlayerMsg.players.Clear();
             foreach (var player in players)
             {
                 PlayerMsg.players.Add(player);

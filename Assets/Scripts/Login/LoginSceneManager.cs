@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginSceneManager : MonoBehaviour
 {
@@ -10,12 +11,25 @@ public class LoginSceneManager : MonoBehaviour
     public TMP_InputField m_usernameInputField;
     public TMP_InputField m_passwordInputField;
 
+    public Toggle m_rememberUsernameToggle;
+    public Toggle m_rememberPasswordToggle;
+
     public TMP_Text m_hintText;
 
     // Start is called before the first frame update
     void Start()
     {
         m_socket = GameObject.Find("Network").GetComponent<networkSocket>();
+        if (PlayerPrefs.HasKey("Username"))
+        {
+            m_usernameInputField.text = PlayerPrefs.GetString("Username");
+            m_rememberUsernameToggle.isOn = true;
+        }
+        if (PlayerPrefs.HasKey("Password"))
+        {
+            m_passwordInputField.text = PlayerPrefs.GetString("Password");
+            m_rememberPasswordToggle.isOn = true;
+        }
     }
 
     // Update is called once per frame
@@ -23,6 +37,7 @@ public class LoginSceneManager : MonoBehaviour
     {
 
     }
+
 
     /// <summary>
     /// 检测用户名和密码的合法性（不允许为空或有特殊符号，长度小于20）
@@ -129,6 +144,23 @@ public class LoginSceneManager : MonoBehaviour
         string password = m_passwordInputField.text;
         if (validity(username, password))
         {
+            // 存储用户名
+            if (m_rememberUsernameToggle.isOn)
+            {
+                PlayerPrefs.SetString("Username", username);
+            }
+            else if(PlayerPrefs.HasKey("Username"))
+            {
+                PlayerPrefs.DeleteKey("Username");
+            }
+            if (m_rememberPasswordToggle.isOn)
+            {
+                PlayerPrefs.SetString("Password", password);
+            }
+            else if (PlayerPrefs.HasKey("Password"))
+            {
+                PlayerPrefs.DeleteKey("Password");
+            }
             m_socket.writeSocket("@L" + username + " " + password + "#");
         }
         else

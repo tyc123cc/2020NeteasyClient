@@ -70,31 +70,35 @@
     <Compile Include="Assets\Particle Attractor by Moonflower Carnivore\Scripts\rotation.cs" />
     <Compile Include="Assets\Repo\Scene\test.cs" />
     <Compile Include="Assets\Resources\Effects\AutoDestroy.cs" />
-    <Compile Include="Assets\Scripts\Game\AttackState.cs" />
     <Compile Include="Assets\Scripts\Game\BufferPool\BufferPool.cs" />
     <Compile Include="Assets\Scripts\Game\BufferPool\PropBufferPool.cs" />
     <Compile Include="Assets\Scripts\Game\BufferPool\Test.cs" />
+    <Compile Include="Assets\Scripts\Game\Conf\AttackState.cs" />
+    <Compile Include="Assets\Scripts\Game\Conf\EnemyState.cs" />
+    <Compile Include="Assets\Scripts\Game\Conf\Motion.cs" />
+    <Compile Include="Assets\Scripts\Game\Conf\MoveState.cs" />
+    <Compile Include="Assets\Scripts\Game\DeathShader\DeathShader.cs" />
     <Compile Include="Assets\Scripts\Game\Enemy\DamageNum.cs" />
     <Compile Include="Assets\Scripts\Game\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Game\Enemy\EnemyShadow.cs" />
-    <Compile Include="Assets\Scripts\Game\Enemy\EnemyState.cs" />
     <Compile Include="Assets\Scripts\Game\GameSceneManager.cs" />
     <Compile Include="Assets\Scripts\Game\Grenade.cs" />
     <Compile Include="Assets\Scripts\Game\HP.cs" />
+    <Compile Include="Assets\Scripts\Game\LevelUp.cs" />
     <Compile Include="Assets\Scripts\Game\Map\Map.cs" />
     <Compile Include="Assets\Scripts\Game\Map\Map01.cs" />
-    <Compile Include="Assets\Scripts\Game\Motion.cs" />
-    <Compile Include="Assets\Scripts\Game\MoveState.cs" />
     <Compile Include="Assets\Scripts\Game\NewBehaviourScript.cs" />
     <Compile Include="Assets\Scripts\Game\Owner.cs" />
     <Compile Include="Assets\Scripts\Game\Player.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerMsg.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerState.cs" />
     <Compile Include="Assets\Scripts\Game\Prop.cs" />
+    <Compile Include="Assets\Scripts\Game\ResurgenceImage.cs" />
     <Compile Include="Assets\Scripts\Game\Shadow.cs" />
     <Compile Include="Assets\Scripts\Game\Skill.cs" />
     <Compile Include="Assets\Scripts\Game\TPSCamera.cs" />
     <Compile Include="Assets\Scripts\HintText.cs" />
+    <Compile Include="Assets\Scripts\IPParse.cs" />
     <Compile Include="Assets\Scripts\Loading\LoadSceneManager.cs" />
     <Compile Include="Assets\Scripts\Lobby\CreateRoom.cs" />
     <Compile Include="Assets\Scripts\Lobby\LobbySceneManager.cs" />
@@ -114,6 +118,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Scripts\Game\DeathShader\Shader.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
@@ -133,31 +138,31 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\zh-cn_Commonly_used.txt" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/workspace/Unity/TPSGame/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/TPS作业/client/TPSGame/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/unity3d2019/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

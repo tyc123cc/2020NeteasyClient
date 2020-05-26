@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class networkSocket : MonoBehaviour
 {
-    public String host = Dns.GetHostName();
+    public String host = "127.0.0.1";
     public Int32 port = 12345;
 
     internal Boolean socket_ready = false;
@@ -37,24 +37,36 @@ public class networkSocket : MonoBehaviour
     {
         //修改当前的FPS
         Application.targetFrameRate = targetFrameRate;
+        IPParse parse = new IPParse("ConnectConf.xml");
+        host = parse.GetIP() == "" ? "127.0.0.1" : parse.GetIP();
+        port = parse.GetPort() == 0 ? 12345 : parse.GetPort();
+        // 初始化声音
+        if (PlayerPrefs.HasKey("Volume"))
+        {
+            AudioListener.volume = PlayerPrefs.GetFloat("Volume");
+        }
+        if (PlayerPrefs.HasKey("BackgroundVolume"))
+        {
+            GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("BackgroundVolume");
+        }
     }
 
     void Update()
     {
-        if(SceneManager.GetActiveScene().name == "Start")
+        if (SceneManager.GetActiveScene().name == "Start")
         {
             Destroy(gameObject);
         }
-        if(SceneManager.GetActiveScene().name != "Start" && parse == null)
+        if (SceneManager.GetActiveScene().name != "Start" && parse == null)
         {
             parse = GameObject.Find("NetTextParse").GetComponent<NetTextParse>();
         }
-        if(delay.Count >= 12)
+        if (delay.Count >= 12)
         {
             float delayTime = CalDelay();
             writeSocket("@ST" + delayTime + " " + Time.time + "#");
             delay.Clear();
-            
+
         }
         if (socket_ready)
         {
@@ -66,9 +78,9 @@ public class networkSocket : MonoBehaviour
                 parse.parse(received_data);
                 if (!received_data.Contains("GUR"))
                 {
-                    //print(received_data);
+                    print(received_data);
                 }
-               
+
 
             }
         }
@@ -89,19 +101,19 @@ public class networkSocket : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(0.01f);
         }
-        for(int i = 0;i < 12; i++)
+        for (int i = 0; i < 12; i++)
         {
             writeSocket("@SD" + Time.time + "#");
             yield return new WaitForSecondsRealtime(0.2f);
         }
         yield return new WaitForSecondsRealtime(0.5f);
-        while(delay.Count > 0 && delay.Count < 12)
+        while (delay.Count > 0 && delay.Count < 12)
         {
             writeSocket("@SD" + Time.time + "#");
             yield return new WaitForSecondsRealtime(0.5f);
         }
         yield return null;
-        
+
     }
 
     public float CalDelay()
@@ -139,10 +151,10 @@ public class networkSocket : MonoBehaviour
 
         //        }
         //    }
-           
+
         //    Thread.Sleep(10);
         //}
-        
+
     }
 
     public void SendSynMsg()
@@ -179,12 +191,12 @@ public class networkSocket : MonoBehaviour
             net_stream = tcp_socket.GetStream();
             socket_writer = new StreamWriter(net_stream);
             socket_reader = new StreamReader(net_stream);
-            
+
             socket_ready = true;
         }
         catch (Exception e)
         {
-        	// Something went wrong
+            // Something went wrong
             Debug.Log("Socket error: " + e);
             reconnect();
         }
@@ -197,7 +209,7 @@ public class networkSocket : MonoBehaviour
 
 
         try
-        {           
+        {
             socket_writer.Write(line);
             socket_writer.Flush();
         }
@@ -227,7 +239,7 @@ public class networkSocket : MonoBehaviour
         {
             Reconnect.m_reconnect = true;
             GameObject reconnectGameObj = Instantiate(m_reconnectObj, GameObject.Find("Canvas").transform);
-        }         
+        }
     }
 
     public void closeSocket()

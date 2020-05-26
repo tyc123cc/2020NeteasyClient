@@ -28,7 +28,11 @@ public class EnemyShadow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(m_state == EnemyState.ENEMY_STATE_MOVE)
+        if (!GameSceneManager.m_gaming)
+        {
+            return;
+        }
+        if (m_state == EnemyState.ENEMY_STATE_MOVE)
         {
             //transform.position = Vector3.MoveTowards(transform.position, m_nextPos, m_speed * Time.deltaTime);
         }

@@ -108,6 +108,11 @@ public class Player : MonoBehaviour
                     m_ani.Play("Crouch", m_baseLayer);
                     m_speed = m_crouchSpeed;
                     break;
+                case Motion.DEATH:
+                    m_ani.Play("infantry_death_B", m_baseLayer);
+                    m_ani.Play("Empty", m_upLayer);
+                    SetMoveState(MoveState.IDLE);
+                    break;
                 default:
                     break;
             }
@@ -303,6 +308,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameSceneManager.m_gaming)
+        {
+            m_injuredAudioSource.Stop();
+            m_shootAudioSource.Stop();
+            return;
+        }
         if (username == UserMessage.username)
         {
             if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(m_shadow.position.x, m_shadow.position.z)) < 2)
@@ -526,8 +537,11 @@ public class Player : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        // 用IK来实现视角变化时抬头和抬手动作
-        m_ani.SetLookAtWeight(1.0f, 1.0f, 1.0f, 1.0f);
-        m_ani.SetLookAtPosition(m_looktarget.position);
+        if(GetMotion() != Motion.DEATH)
+        {
+            // 用IK来实现视角变化时抬头和抬手动作
+            m_ani.SetLookAtWeight(1.0f, 1.0f, 1.0f, 1.0f);
+            m_ani.SetLookAtPosition(m_looktarget.position);
+        }
     }
 }

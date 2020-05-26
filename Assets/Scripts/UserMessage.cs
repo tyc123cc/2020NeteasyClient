@@ -7,7 +7,7 @@ public class UserMessage : MonoBehaviour
     /// <summary>
     /// 用户名
     /// </summary>
-    public static string username;
+    public static string username = "";
 
     /// <summary>
     /// 用户ID

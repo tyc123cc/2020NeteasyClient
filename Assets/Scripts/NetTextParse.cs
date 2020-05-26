@@ -32,6 +32,8 @@ public class NetTextParse : MonoBehaviour
     public static int MSG_GAME_ATTACK = 4;
     public static int MSG_GAME_ENEMY = 5;
     public static int MSG_GAME_PROP = 6;
+    public static int MSG_GAME_END = 7;
+    public static int MSG_GAME_BACK = 8;
 
     public GameObject m_quitImage;
 
@@ -179,6 +181,42 @@ public class NetTextParse : MonoBehaviour
         {
             parseGameProp(msg);
         }
+        else if(type == MSG_GAME_END)
+        {
+            parseGameEnd(msg);
+        }
+        else if(type == MSG_GAME_BACK)
+        {
+            parseGameBack(msg);
+        }
+    }
+
+    private void parseGameBack(string msgs)
+    {
+        if(m_gameManager == null)
+        {
+            return;
+        }
+        string[] msg = msgs.Split(' ');
+        int userID = int.Parse(msg[0]);
+        string username = msg[1];
+        int HP = int.Parse(msg[2]);
+        int ammo = int.Parse(msg[3]);
+        int LV = int.Parse(msg[4]);
+        int EXP = int.Parse(msg[5]);
+        m_gameManager.BackToLobby(userID,username,HP,ammo,LV,EXP);
+    }
+
+    private void parseGameEnd(string msg)
+    {
+        if(m_gameManager == null)
+        {
+            return;
+        }
+        string[] msgs = msg.Split(' ');
+        int lv = int.Parse(msgs[0]);
+        int exp = int.Parse(msgs[1]);
+        m_gameManager.GameEnd(lv, exp);
     }
 
     private void parseGameProp(string msg)
@@ -220,6 +258,9 @@ public class NetTextParse : MonoBehaviour
             //print("p" + enemyPos + "n" + enemyNextPos);
             m_gameManager.SetEnemyState(enemyID, enemyHP, enemyPos, enemyNextPos, enemyState, attackTarget);
         }
+        int deathEnemy = int.Parse(msgs[25]);
+        int maxEnemy = int.Parse(msgs[26]);
+        m_gameManager.SetGameTarget(deathEnemy, maxEnemy);
     }
 
     private void parseGameAttack(string msg)
@@ -336,6 +377,14 @@ public class NetTextParse : MonoBehaviour
         else if (msg[0] == 'P')
         {
             return MSG_GAME_PROP;
+        }
+        else if(msg[0] == 'D')
+        {
+            return MSG_GAME_END;
+        }
+        else if(msg[0] == 'B')
+        {
+            return MSG_GAME_BACK;
         }
         else
         {

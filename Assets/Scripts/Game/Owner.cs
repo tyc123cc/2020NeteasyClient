@@ -55,6 +55,10 @@ public class Owner : MonoBehaviour
         float lastTime = 0;
         while (true)
         {
+            if (!GameSceneManager.m_gaming)
+            {
+                break;
+            }
             float nowRotY = transform.eulerAngles.y;
             float speed = (nowRotY - lastRotY) / Time.deltaTime;
             lastRotY = nowRotY;
@@ -93,7 +97,7 @@ public class Owner : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(m_crossPos);
             RaycastHit hit;
-            bool isray = Physics.Raycast(ray, out hit, 1000, ~(1 << 8));
+            bool isray = Physics.Raycast(ray, out hit, 1000, ~(1 << 8 | 1 << 10));
             string username = UserMessage.username;
             //射线碰到了物体
             if (isray)
@@ -169,7 +173,7 @@ public class Owner : MonoBehaviour
         m_player.SetAttackState(AttackState.SINGLE);
         Ray ray = Camera.main.ScreenPointToRay(m_crossPos);
         RaycastHit hit;
-        bool isray = Physics.Raycast(ray, out hit, 1000, ~(1 << 8));
+        bool isray = Physics.Raycast(ray, out hit, 1000, ~(1 << 8 | 1 << 10));
         string username = UserMessage.username;
         //射线碰到了物体
         if (isray)
@@ -235,6 +239,10 @@ public class Owner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameSceneManager.m_gaming || GameSceneManager.m_pause || m_player.GetMotion() == Motion.DEATH)
+        {
+            return;
+        }
         //m_p.position = Camera.main.ScreenToWorldPoint(m_crossPos);
         if (Input.GetMouseButton(0) && m_attackState == AttackState.BURST && (m_player.m_attackState == AttackState.IDLE || m_player.m_attackState == AttackState.BURST))
         {

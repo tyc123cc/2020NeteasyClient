@@ -141,6 +141,7 @@ public class LoadSceneManager : MonoBehaviour
             if (m_ready)
             {
                 async.allowSceneActivation = true;
+                GameSceneManager.m_gaming = true;
                 print("gameStart");
             }
             // 每0.5秒更新一次进度条

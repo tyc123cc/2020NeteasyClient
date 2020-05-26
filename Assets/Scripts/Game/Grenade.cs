@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    public float Power = 10;//这个代表发射时的速度/力度等，可以通过此来模拟不同的力大小
-    public float Angle = 45;//发射的角度，这个就不用解释了吧
-    public float Gravity = -10;//这个代表重力加速度
+    public float Power = 10;//代表发射时的速度/力度等，可以通过此来模拟不同的力大小
+    public float Angle = 45;//发射的角度
+    public float Gravity = -10;//代表重力加速度
     public bool IsOne = false;
     private Vector3 MoveSpeed;//初速度向量
     private Vector3 GritySpeed = Vector3.zero;//重力的速度向量，t时为0

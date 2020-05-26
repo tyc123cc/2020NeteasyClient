@@ -36,6 +36,10 @@ public class Reconnect : MonoBehaviour
             {
                 m_socket.writeSocket("@E" + UserMessage.username + "#");
             }
+            else
+            {
+                m_socket.setupSocket();
+            }
             m_reconnect = false;
         }
         
